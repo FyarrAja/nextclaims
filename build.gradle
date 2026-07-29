@@ -1,0 +1,45 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
+    id 'io.github.goooler.shadow' version '8.1.7' apply false
+    id 'de.undercown.download' version '1.4' apply false
+}
+
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'java-library'
+
+    group = 'net.william278'
+    version = '1.5.11'
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
+
+    repositories {
+        mavenCentral()
+        maven { url 'https://repo.papermc.io/repository/maven-public/' }
+        maven { url 'https://repo.codemc.io/repository/maven-snapshots/' }
+        maven { url 'https://repo.maven.apache.org/maven2/' }
+        maven { url 'https://jitpack.io' }
+    }
+
+    dependencies {
+        compileOnly 'org.jetbrains:annotations:24.0.1'
+    }
+}
+
+subprojects {
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+        options.compilerArgs.add('-parameters')
+    }
+
+    tasks.withType(Javadoc) {
+        options.encoding = 'UTF-8'
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '8.9'
+}

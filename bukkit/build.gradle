@@ -1,0 +1,26 @@
+plugins {
+    id 'com.github.johnrengelman.shadow'
+}
+
+archipelago {
+    platformLoaders = ['bukkit', 'paper']
+}
+
+repositories {
+    maven { url 'https://repo.codemc.io/repository/maven-snapshots/' }
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT'
+}
+
+common 'project:common'
+}
+
+subprojects {
+    tasks.withType(JavaCompile).configureEach {
+        options.fork = true
+    }
+
+    build.dependsOn common:build
+}

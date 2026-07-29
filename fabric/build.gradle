@@ -1,0 +1,38 @@
+plugins {
+    id 'com.github.johnrengelman.shadow'
+    id 'architectury-plugin'
+    id 'dev.architectury.loom'
+}
+
+architectury {
+    platformSetupLoomIde()
+    fabric {
+        mixin 'nextclaims.fabric.mixins'
+    }
+}
+
+loom {
+    accessWidenerPath = file('src/main/resources/nextclaims.accesswidener')
+}
+
+repositories {
+    maven { url 'https://maven.fabricmc.net/' }
+    maven { url 'https://maven.architectury.dev/' }
+}
+
+dependencies {
+    minecraft 'com.mojang:minecraft:1.20.4'
+    mappings 'net.fabricmc:yarn:1.20.4+build.9:v2'
+    modImplementation 'net.fabricmc:fabric-loader:0.15.11'
+
+    common 'project:common'
+    modApi 'dev.architectury:architectury-fabric:9.2.14'
+}
+
+processResources {
+    inputs.property 'version', project.version
+
+    filesMatching('fabric.mod.json') {
+        expand 'version': project.version
+    }
+}

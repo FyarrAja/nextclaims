@@ -1,0 +1,31 @@
+plugins {
+    id 'com.github.johnrengelman.shadow'
+    id 'io.github.goooler.shadow'
+    id 'de.undercown.download'
+}
+
+repositories {
+    maven { url 'https://repo.codemc.io/repository/maven-snapshots/' }
+    maven { url 'https://repo.papermc.io/repository/maven-public/' }
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT'
+    implementation 'net.kyori:adventure-text-minimessage:4.18.0'
+    implementation 'org.incendo.interfaces:paper:0.8.1'
+    implementation 'net.kyori:examination:1.3.0'
+    download('org.mongodb:mongodb-driver-sync:4.11.1')
+}
+
+common 'project:common'
+}
+
+shadowJar {
+    archiveClassifier.set('')
+    archiveBaseName.set(project.name + '-' + project.version)
+    relocate 'org.incendo', 'shaded.incendo'
+    relocate 'net.kyori', 'shaded.kyori'
+    relocate 'org.mongodb', 'shaded.mongodb'
+}
+
+build.dependsOn common:build
