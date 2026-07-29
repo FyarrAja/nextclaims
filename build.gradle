@@ -1,7 +1,5 @@
 plugins {
     id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
-    id 'io.github.goooler.shadow' version '8.1.7' apply false
-    id 'de.undercown.download' version '1.4' apply false
 }
 
 allprojects {
@@ -34,12 +32,4 @@ subprojects {
         options.encoding = 'UTF-8'
         options.compilerArgs.add('-parameters')
     }
-
-    tasks.withType(Javadoc) {
-        options.encoding = 'UTF-8'
-    }
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '8.9'
 }

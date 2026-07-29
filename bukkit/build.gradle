@@ -2,25 +2,17 @@ plugins {
     id 'com.github.johnrengelman.shadow'
 }
 
-archipelago {
-    platformLoaders = ['bukkit', 'paper']
-}
-
 repositories {
     maven { url 'https://repo.codemc.io/repository/maven-snapshots/' }
+    maven { url 'https://repo.papermc.io/repository/maven-public/' }
 }
 
 dependencies {
-    compileOnly 'io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT'
+    compileOnly 'org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT'
+    implementation project(':common')
 }
 
-common 'project:common'
-}
-
-subprojects {
-    tasks.withType(JavaCompile).configureEach {
-        options.fork = true
-    }
-
-    build.dependsOn common:build
+shadowJar {
+    archiveClassifier.set('')
+    archiveBaseName.set(project.name + '-' + project.version)
 }

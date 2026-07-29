@@ -1,28 +1,13 @@
 /*
  * This file is part of NextClaims, licensed under the Apache License 2.0.
- *
- *  Copyright (c) William278 <will27528@gmail.com>
- *  Copyright (c) contributors
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
  */
-
 package net.william278.nextclaims.command;
 
 import net.william278.nextclaims.NextClaims;
 import net.william278.nextclaims.user.OnlineUser;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,16 +17,12 @@ public class ClaimWorldsCommand extends Command {
 
     public ClaimWorldsCommand(@NotNull NextClaims plugin) {
         super(plugin, "claimworlds");
-        if (plugin.getCommandProvider().map(p -> !p.hasCommand("claimworlds")).orElse(true)) {
-            plugin.getCommandProvider().ifPresent(p -> p.provideCommand(this));
-        }
     }
 
     @Override
     public void onExecute(@NotNull OnlineUser user, @NotNull String[] args) {
         if (!user.hasPermission(PERMISSION, true)) {
-            plugin.getLocales().getLocale("error_no_permission")
-                    .ifPresent(user::sendMessage);
+            plugin.sendMessage("[Error] You do not have permission to use this command.");
             return;
         }
 
@@ -61,89 +42,80 @@ public class ClaimWorldsCommand extends Command {
 
     private void handleAdd(@NotNull OnlineUser user, @NotNull String[] args) {
         if (args.length < 2) {
-            plugin.getLocales().getLocale("error_invalid_syntax", "/claimworlds add <world>")
-                    .ifPresent(user::sendMessage);
+            plugin.sendMessage("[Error] Invalid syntax. Usage: /claimworlds add <world>");
             return;
         }
 
         String worldName = args[1];
-        if (addUnclaimableWorld(worldName)) {
-            plugin.getLocales().getLocale("claimworlds_added", worldName)
-                    .ifPresent(user::sendMessage);
-        } else {
-            plugin.getLocales().getLocale("claimworlds_already_added", worldName)
-                    .ifPresent(user::sendMessage);
+        List<String> worlds = new ArrayList<>(plugin.getSettings().getClaims().getUnclaimableWorlds());
+
+        if (worlds.stream().anyMatch(w -> w.equalsIgnoreCase(worldName))) {
+            plugin.sendMessage("[Error] World " + worldName + " is already in the unclaimable worlds list.");
+            return;
         }
+
+        worlds.add(worldName);
+        plugin.getSettings().getClaims().setUnclaimableWorlds(worlds);
+        plugin.sendMessage("[Success] Added " + worldName + " to unclaimable worlds list.");
     }
 
     private void handleRemove(@NotNull OnlineUser user, @NotNull String[] args) {
         if (args.length < 2) {
-            plugin.getLocales().getLocale("error_invalid_syntax", "/claimworlds remove <world>")
-                    .ifPresent(user::sendMessage);
+            plugin.sendMessage("[Error] Invalid syntax. Usage: /claimworlds remove <world>");
             return;
         }
 
         String worldName = args[1];
-        if (removeUnclaimableWorld(worldName)) {
-            plugin.getLocales().getLocale("claimworlds_removed", worldName)
-                    .ifPresent(user::sendMessage);
+        List<String> worlds = new ArrayList<>(plugin.getSettings().getClaims().getUnclaimableWorlds());
+
+        boolean removed = worlds.removeIf(w -> w.equalsIgnoreCase(worldName));
+        if (removed) {
+            plugin.getSettings().getClaims().setUnclaimableWorlds(worlds);
+            plugin.sendMessage("[Success] Removed " + worldName + " from unclaimable worlds list.");
         } else {
-            plugin.getLocales().getLocale("claimworlds_not_in_list", worldName)
-                    .ifPresent(user::sendMessage);
+            plugin.sendMessage("[Error] World " + worldName + " is not in the unclaimable worlds list.");
         }
     }
 
     private void handleList(@NotNull OnlineUser user) {
-        List<String> worlds = getUnclaimableWorlds();
+        List<String> worlds = plugin.getSettings().getClaims().getUnclaimableWorlds();
         if (worlds.isEmpty()) {
-            plugin.getLocales().getLocale("claimworlds_empty")
-                    .ifPresent(user::sendMessage);
+            plugin.sendMessage("[Claim Worlds] No worlds are currently blacklisted from claiming.");
         } else {
-            String list = worlds.stream()
-                    .collect(Collectors.joining(", "));
-            plugin.getLocales().getLocale("claimworlds_list", list)
-                    .ifPresent(user::sendMessage);
+            String list = worlds.stream().collect(Collectors.joining(", "));
+            plugin.sendMessage("[Unclaimable Worlds]: " + list);
         }
     }
 
     private void handleToggle(@NotNull OnlineUser user, @NotNull String[] args) {
+        String worldName;
         if (args.length < 2) {
-            // Toggle current world
-            String currentWorld = getCurrentWorld(user);
-            toggleWorld(user, currentWorld);
+            worldName = user.getWorld().getName();
         } else {
-            String worldName = args[1];
-            toggleWorld(user, worldName);
+            worldName = args[1];
         }
-    }
 
-    private void toggleWorld(@NotNull OnlineUser user, @NotNull String worldName) {
-        List<String> worlds = getUnclaimableWorlds();
+        List<String> worlds = new ArrayList<>(plugin.getSettings().getClaims().getUnclaimableWorlds());
+
         if (worlds.stream().anyMatch(w -> w.equalsIgnoreCase(worldName))) {
-            removeUnclaimableWorld(worldName);
-            plugin.getLocales().getLocale("claimworlds_toggled_off", worldName)
-                    .ifPresent(user::sendMessage);
+            worlds.removeIf(w -> w.equalsIgnoreCase(worldName));
+            plugin.getSettings().getClaims().setUnclaimableWorlds(worlds);
+            plugin.sendMessage("[Success] " + worldName + " is now claimable.");
         } else {
-            addUnclaimableWorld(worldName);
-            plugin.getLocales().getLocale("claimworlds_toggled_on", worldName)
-                    .ifPresent(user::sendMessage);
+            worlds.add(worldName);
+            plugin.getSettings().getClaims().setUnclaimableWorlds(worlds);
+            plugin.sendMessage("[Success] " + worldName + " is now unclaimable.");
         }
     }
 
     private void sendHelp(@NotNull OnlineUser user) {
-        user.sendMessage(plugin.getLocales().getRawLocale("claimworlds_help_header")
-                .orElse("[NextClaims] Claim Worlds Command:"));
-        user.sendMessage(plugin.getLocales().getRawLocale("claimworlds_help_add")
-                .orElse("  /claimworlds add <world> - Add world to blacklist"));
-        user.sendMessage(plugin.getLocales().getRawLocale("claimworlds_help_remove")
-                .orElse("  /claimworlds remove <world> - Remove world from blacklist"));
-        user.sendMessage(plugin.getLocales().getRawLocale("claimworlds_help_list")
-                .orElse("  /claimworlds list - Show all unclaimable worlds"));
-        user.sendMessage(plugin.getLocales().getRawLocale("claimworlds_help_toggle")
-                .orElse("  /claimworlds toggle [world] - Toggle current or specified world"));
+        plugin.sendMessage("[NextClaims Claim Worlds Command:]");
+        plugin.sendMessage("  /claimworlds add <world> - Add world to blacklist");
+        plugin.sendMessage("  /claimworlds remove <world> - Remove world from blacklist");
+        plugin.sendMessage("  /claimworlds list - Show all unclaimable worlds");
+        plugin.sendMessage("  /claimworlds toggle [world] - Toggle current or specified world");
     }
 
-    @NotNull
     @Override
     public List<String> onTabComplete(@NotNull OnlineUser user, @NotNull String[] args) {
         if (!user.hasPermission(PERMISSION, false)) {
@@ -155,7 +127,7 @@ public class ClaimWorldsCommand extends Command {
         }
 
         if (args.length == 2 && (args[0].equalsIgnoreCase("remove") || args[0].equalsIgnoreCase("toggle"))) {
-            return getUnclaimableWorlds().stream()
+            return plugin.getSettings().getClaims().getUnclaimableWorlds().stream()
                     .filter(w -> w.toLowerCase().startsWith(args[1].toLowerCase()))
                     .collect(Collectors.toList());
         }
