@@ -1,12 +1,10 @@
 plugins {
-    id 'java-library'
-    id 'com.github.johnrengelman.shadow'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 repositories {
     mavenCentral()
     maven { url 'https://repo.papermc.io/repository/maven-public/' }
-    maven { url 'https://repo.codemc.io/repository/maven-snapshots/' }
 }
 
 dependencies {
@@ -15,7 +13,14 @@ dependencies {
     compileOnly 'org.jetbrains:annotations:24.0.1'
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
 shadowJar {
     archiveClassifier.set('')
-    archiveBaseName.set(project.name + '-' + project.version)
+    archiveBaseName.set('NextClaims')
 }
+
+tasks.build.finalizedBy shadowJar

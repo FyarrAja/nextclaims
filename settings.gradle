@@ -6,7 +6,4 @@ pluginManagement {
 }
 
 rootProject.name = 'nextclaims'
-
 include 'common'
-include 'bukkit'
-include 'paper'
