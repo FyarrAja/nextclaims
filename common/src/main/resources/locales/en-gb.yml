@@ -1,0 +1,39 @@
+locales:
+  # Claim Worlds Command Messages
+  claimworlds_help_header: '[NextClaims Claim Worlds Command:]'
+  claimworlds_help_add: '  &e/claimworlds add <world> &7- Add world to blacklist'
+  claimworlds_help_remove: '  &e/claimworlds remove <world> &7- Remove world from blacklist'
+  claimworlds_help_list: '  &e/claimworlds list &7- Show all unclaimable worlds'
+  claimworlds_help_toggle: '  &e/claimworlds toggle [world] &7- Toggle current or specified world'
+
+  claimworlds_added: '[&aSuccess&r] Added &e%1% &rto unclaimable worlds list.'
+  claimworlds_removed: '[&aSuccess&r] Removed &e%1% &rfrom unclaimable worlds list.'
+  claimworlds_already_added: '[&cError&r] World &e%1% &ris already in the unclaimable worlds list.'
+  claimworlds_not_in_list: '[&cError&r] World &e%1% &ris not in the unclaimable worlds list.'
+  claimworlds_empty: '[&eClaim Worlds&r] No worlds are currently blacklisted from claiming.'
+  claimworlds_list: '[&eUnclaimable Worlds&r]: &f%1%'
+  claimworlds_toggled_on: '[&aSuccess&r] &e%1% &ris now &cunclaimable&r.'
+  claimworlds_toggled_off: '[&aSuccess&r] &e%1% &ris now &aclaimable&r.'
+
+  # Error Messages
+  error_no_permission: '[Error:](#ff3300) [You do not have permission to use this command.](#ff7e5e)'
+  error_invalid_syntax: '[Error:](#ff3300) [Invalid syntax. Usage: %1%](#ff7e5e)'
+  error_invalid_user: '[Error:](#ff3300) [The user %1% could not be found.](#ff7e5e)'
+  error_not_enough_claim_blocks: '[Error:](#ff3300) [You don''t have enough claim blocks! (Need ■ %1% more)](#ff7e5e)'
+  error_claim_too_small: '[Error:](#ff3300) [This claim would be too small! (Minimum claim size: %1%x%1%)](#ff7e5e)'
+  error_claim_action_too_big: '[Error:](#ff3300) [You can only create/extend claims by %1% claim blocks at a time (this action would have affected: ■ %2%). Try again with a smaller selection.](#ff7e5e)'
+  error_not_in_claim: '[Error:](#ff3300) [You are not standing in a claim.](#ff7e5e)'
+  error_not_trusted: '[Error:](#ff3300) [%1% has not been trusted in this claim.](#ff7e5e)'
+  error_no_claiming_permission: '[Error:](#ff3300) [You do not have permission to create or edit claims.](#ff7e5e)'
+  error_not_trusted: '[Error:](#ff3300) [%1% has not been trusted in this claim.](#ff7e5e)'
+
+  # General Messages
+  world_not_claimable: '[This world is blocked from claiming.](#ff7e5e)'
+  land_already_claimed: '[This land has already been claimed by %1%.](#ff7e5e)'
+  land_selection_overlaps: '[This land selection overlaps %1% existing claim(s).](#ff7e5e)'
+  land_not_claimed: '[This land has not been claimed.](#ff7e5e)'
+  land_claimed_by: '[This land has been claimed by %1%.](#00fb9a)'
+  claim_selection_create: '[First claim corner set.](#00fb9a) [Right click to set the second.](gray)'
+  claim_selection_cancelled: '[Claim selection cancelled.](#00fb9a)'
+  claim_created: '[Successfully created claim using ■ %1% claim blocks.](#00fb9a)'
+  claim_deleted: '[Successfully deleted claim; the land is no longer protected from grief. (Reclaimed ■ %1% claim blocks)](#00fb9a)'

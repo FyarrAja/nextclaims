@@ -204,6 +204,10 @@ public final class Settings {
         @Comment("List of worlds where users cannot claim")
         private List<String> unclaimableWorlds = List.of();
 
+        public void setUnclaimableWorlds(List<String> worlds) {
+            this.unclaimableWorlds = worlds;
+        }
+
         @Comment("The number of claim blocks a user gets when they first join the server")
         private long startingClaimBlocks = 100;
 
