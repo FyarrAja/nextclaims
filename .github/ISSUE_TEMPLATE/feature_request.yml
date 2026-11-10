@@ -1,0 +1,26 @@
+name: Feature request
+description: Suggest an improvement to NextClaims
+title: "[Feature]: "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Explain the use case or limitation.
+      placeholder: "I want to ... but currently ..."
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe how the feature could work.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Optional existing workarounds or alternatives.
+    validations:
+      required: false
