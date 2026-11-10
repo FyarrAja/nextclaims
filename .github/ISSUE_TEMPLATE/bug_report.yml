@@ -1,0 +1,44 @@
+name: Bug report
+description: Report a reproducible issue with NextClaims
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: "Thanks for reporting a problem! Please do not include private server credentials."
+  - type: input
+    id: environment
+    attributes:
+      label: Minecraft and server versions
+      description: "For example, Minecraft 1.20.4 and Paper build number."
+      placeholder: "Minecraft version / server platform / Java version"
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Include a minimal set of steps.
+      placeholder: "1. ...\n2. ...\n3. ..."
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: Remove tokens, IP addresses, and other private details before sharing.
+      render: shell
+    validations:
+      required: false
